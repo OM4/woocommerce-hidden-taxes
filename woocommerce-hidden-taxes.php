@@ -278,14 +278,10 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 		 */
 		public function is_hidden_tax_rate( $key_or_rate ) {
 
-			global $wpdb;
-
-			$rate_id = 0;
-
 			if ( is_object( $key_or_rate ) ) {
 				$rate_id = $key_or_rate->tax_rate_id;
 			} else {
-				$rate_id = $wpdb->get_var( $wpdb->prepare( "SELECT `tax_rate_id` FROM `{$wpdb->prefix}woocommerce_tax_rates` WHERE `tax_rate_id` = %d", $key_or_rate ) );
+				$rate_id = intval( $key_or_rate );
 			}
 
 			$hidden_rates = $this->get_hidden_tax_rates();

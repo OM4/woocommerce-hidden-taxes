@@ -3,6 +3,11 @@
  * Filter/override WooCommerce's display of taxes in the cart and order screens,
  * in order to hide any hidden tax rates from the customer.
  *
+ * Also hides the hidden tax rates from the order-related emails that get sent to the
+ * customer and the store owner.
+ *
+ * Does not hide the hidden tax rates from the View/Edit order screens.
+ *
  * @package    WooCommerce Hidden Taxes
  * @author     OM4
  * @since      1.0
@@ -44,7 +49,7 @@ class WC_Hidden_Taxes_Display {
 			return $tax_totals;
 		}
 		foreach ( $tax_totals as $key => $value ) {
-			if ( wc_hidden_taxes()->is_hidden_tax_rate( $value->tax_rate_id ) ) {
+			if ( wc_hidden_taxes()->is_hidden_tax_rate( isset( $value->tax_rate_id ) ? $value->tax_rate_id : $value->rate_id ) ) {
 				unset( $tax_totals[ $key ] );
 			}
 		}
