@@ -1,10 +1,10 @@
 === WooCommerce Hidden Taxes ===
 
-Hide one or more tax rates from customers.
+Hide one or more WooCommerce tax rates from your customers.
 
 Contributors: jamescollins, OM4
 Donate link: https://om4.com.au/plugins/#donate
-Tags: woocommerce, tax, gst, wet
+Tags: woocommerce, tax, gst, wet, hide, hidden
 Requires at least: 4.0
 Tested up to: 4.4
 Stable tag: 1.0
@@ -13,9 +13,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Description ==
 
-Hide one or more tax rates from customers.
+Hide one or more WooCommerce tax rates from your customers.
 
-For example, Wineries may wish to hide all references of WET from their customers.
+For example, a winery may wish to hide all references of WET (Wine Equalisation Tax) from their customers.
 
 == Installation ==
 
