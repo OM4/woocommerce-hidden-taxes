@@ -3,12 +3,14 @@
  * Plugin Name: WooCommerce Hidden Taxes
  * Plugin URI: https://om4.com.au/plugins/woocommerce-hidden-taxes/
  * Description: Hide one or more tax rates from customers.
- * Version: 0.1
+ * Version: 0.2
  * Author: OM4
  * Author URI: https://om4.com.au/plugins/
  * License: GPLv2+
  * Text Domain: woocommerce-hidden-taxes
  * Domain Path: /languages
+ * Git URI: https://github.com/OM4/woocommerce-hidden-taxes
+ * Git Branch: release
  *
  * @package    WooCommerce Hidden Taxes
  * @author     OM4
@@ -44,9 +46,9 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 	class WC_Hidden_Taxes {
 
 		/**
-		 * Plugin version (used for update checks)
+		 * Plugin version (used for JS file versioning)
 		 */
-		const version = '0.1';
+		const version = '0.2';
 
 		/**
 		 * Database version (used for install/upgrade tasks if required)
@@ -120,7 +122,7 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 
 			self::$plugin_file = __FILE__;
 			self::$plugin_path = dirname( self::$plugin_file ) . '/';
-			self::$plugin_url = plugin_dir_url( self::$plugin_file );
+			self::$plugin_url  = plugin_dir_url( self::$plugin_file );
 
 			// Set up class autoloading.
 			if ( function_exists( '__autoload' ) ) {
@@ -193,7 +195,7 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 			<div id="message" class="error">
 				<p><?php esc_html_e( sprintf( __( 'The WooCommerce Hidden Taxes plugin is only compatible with WooCommerce version %s or later. Please update WooCommerce.', 'woocommerce-hidden-taxes' ), self::MINIMUM_SUPPORTED_WOOCOMMERCE_VERSION ) ); ?></p>
 			</div>
-		<?php
+			<?php
 		}
 
 		/**
@@ -207,7 +209,7 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 				$this->admin = new WC_Hidden_Taxes_Admin();
 			}
 
-			// @TODO
+			new WC_Hidden_Taxes_Display();
 
 		}
 
@@ -224,6 +226,11 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 				case 'db_version':
 					$value = intval( $value );
 					break;
+				case 'hidden_rates':
+					if ( false === $value ) {
+						$value = array();
+					}
+					break;
 				default:
 
 					break;
@@ -234,7 +241,7 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 		/**
 		 * Set/save an option/setting for this plugin.
 		 *
-		 * @param string $option_name The name/key of the option/setting.
+		 * @param string $option_name  The name/key of the option/setting.
 		 * @param string $option_value The value of the option/setting.
 		 *
 		 * @return bool
@@ -257,10 +264,45 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 		public function action_links( $links ) {
 
 			$plugin_links = array(
-				'<a href="' . self::documentation_url . '">' . __( 'Documentation', 'woocommerce-hidden-taxes' ) . '</a>',
+					'<a href="' . self::documentation_url . '">' . __( 'Documentation', 'woocommerce-hidden-taxes' ) . '</a>',
 			);
 
 			return array_merge( $plugin_links, $links );
+		}
+
+
+		/**
+		 * Check whether the specified tax rate is hidden.
+		 *
+		 * @param mixed $key_or_rate Tax rate ID, or the db row itself in object format.
+		 */
+		public function is_hidden_tax_rate( $key_or_rate ) {
+
+			global $wpdb;
+
+			$rate_id = 0;
+
+			if ( is_object( $key_or_rate ) ) {
+				$rate_id = $key_or_rate->tax_rate_id;
+			} else {
+				$rate_id = $wpdb->get_var( $wpdb->prepare( "SELECT `tax_rate_id` FROM `{$wpdb->prefix}woocommerce_tax_rates` WHERE `tax_rate_id` = %d", $key_or_rate ) );
+			}
+
+			$hidden_rates = $this->get_hidden_tax_rates();
+
+			if ( isset( $hidden_rates[ $rate_id ] ) ) {
+				return true;
+			}
+			return false;
+
+		}
+
+		/**
+		 * Get the list of hidden tax zones.
+		 * @return array
+		 */
+		public function get_hidden_tax_rates() {
+			return $this->get_option( 'hidden_rates' );
 		}
 	}
 
