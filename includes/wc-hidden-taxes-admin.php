@@ -65,7 +65,9 @@ class WC_Hidden_Taxes_Admin {
 	 */
 	public function save_tax_rate_hidden_status( $tax_rate_id ) {
 		$hidden_rates = wc_hidden_taxes()->get_hidden_tax_rates();
+		// @codingStandardsIgnoreStart
 		if ( isset( $_POST['tax_rate_hidden'][ $tax_rate_id ] ) ) {
+			// @codingStandardsIgnoreEnd
 			$hidden_rates[ $tax_rate_id ] = true;
 		} else {
 			if ( isset( $hidden_rates[ $tax_rate_id ] ) ) {
