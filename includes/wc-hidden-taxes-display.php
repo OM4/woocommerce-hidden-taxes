@@ -1,7 +1,6 @@
 <?php
 /**
- * Filter/override WooCommerce's display of taxes in the cart and order screens,
- * in order to hide any hidden tax rates from the customer.
+ * Hides any hidden tax rates in the cart, checkout, order received and my account pages.
  *
  * Also hides the hidden tax rates from the order-related emails that get sent to the
  * customer and the store owner.
