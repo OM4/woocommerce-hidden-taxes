@@ -42,8 +42,10 @@ class WC_Hidden_Taxes_Admin {
 	 */
 	public function woocommerce_settings_tax() {
 
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 		// @TODO: Tooltips don't display because woocommerce_admin.js fires in the header (before our additional td is added via jQuery)
-		wp_enqueue_script( 'woocommerce_hidden_taxes', wc_hidden_taxes::$plugin_url . 'js/admin.js', array( 'jquery' ), wc_hidden_taxes::version, true );
+		wp_enqueue_script( 'woocommerce_hidden_taxes', wc_hidden_taxes::$plugin_url . 'js/admin' . $suffix . '.js', array( 'jquery' ), wc_hidden_taxes::version, true );
 
 		wp_localize_script( 'woocommerce_hidden_taxes', 'wc_hidden_taxes',
 			array(
@@ -55,7 +57,9 @@ class WC_Hidden_Taxes_Admin {
 	}
 
 	/**
-	 * Whenever a WooCommerce tax rate is saved, also save the hidden status.
+	 * Whenever a WooCommerce tax rate is saved, also save the tax rate's hidden status.
+	 *
+	 * Executed whenever a WooCommerce tax rate is added, updated or deleted.
 	 *
 	 * @param int $tax_rate_id The WooCommerce Tax Rate ID.
 	 */

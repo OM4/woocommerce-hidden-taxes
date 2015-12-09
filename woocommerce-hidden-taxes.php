@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Hidden Taxes
  * Plugin URI: https://om4.com.au/plugins/woocommerce-hidden-taxes/
  * Description: Hide one or more tax rates from customers.
- * Version: 0.2
+ * Version: 1.0
  * Author: OM4
  * Author URI: https://om4.com.au/plugins/
  * License: GPLv2+
@@ -48,7 +48,7 @@ if ( ! class_exists( 'WC_Hidden_Taxes' ) ) {
 		/**
 		 * Plugin version (used for JS file versioning)
 		 */
-		const version = '0.2';
+		const version = '1.0';
 
 		/**
 		 * Database version (used for install/upgrade tasks if required)
